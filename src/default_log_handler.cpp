@@ -33,7 +33,6 @@
 
 namespace urcl
 {
-
 DefaultLogHandler::DefaultLogHandler()
 {
 }
@@ -62,4 +61,4 @@ void DefaultLogHandler::log(const char* file, int line, LogLevel loglevel, const
   }
 }
 
-} // namespace urcl
+}  // namespace urcl

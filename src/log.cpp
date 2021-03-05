@@ -35,8 +35,6 @@
 
 namespace urcl
 {
-
-// Class for storing current loghandler and loglevel
 class Logger
 {
 public:
@@ -88,26 +86,26 @@ private:
   std::unique_ptr<LogHandler> log_handler_;
   LogLevel log_level_;
 };
-Logger logger;
+Logger g_logger;
 
 void registerLogHandler(LogHandler* loghandler)
 {
-  logger.registerLogHandler(loghandler);
+  g_logger.registerLogHandler(loghandler);
 }
 
 void unregisterLogHandler()
 {
-  logger.unregisterLogHandler();
+  g_logger.unregisterLogHandler();
 }
 
 void setLogLevel(LogLevel level)
 {
-  logger.setLogLevel(level);
+  g_logger.setLogLevel(level);
 }
 
 void log(const char* file, int line, LogLevel level, const char* fmt, ...)
 {
-  if (level >= logger.getLogLevel())
+  if (level >= g_logger.getLogLevel())
   {
     size_t buffer_size = 1024;
     std::unique_ptr<char> buffer;
@@ -130,8 +128,8 @@ void log(const char* file, int line, LogLevel level, const char* fmt, ...)
     va_end(args);
     va_end(args_copy);
 
-    logger.log(file, line, level, buffer.get());
+    g_logger.log(file, line, level, buffer.get());
   }
 }
 
-} // namespace urcl
+}  // namespace urcl

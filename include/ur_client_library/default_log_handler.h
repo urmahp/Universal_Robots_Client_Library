@@ -34,7 +34,6 @@
 
 namespace urcl
 {
-
 /*!
  * \brief LogHandler object for default handling of logging messages.
  * This class is used when no other LogHandler is registered
@@ -42,7 +41,6 @@ namespace urcl
 class DefaultLogHandler : public LogHandler
 {
 public:
-
   /*!
    * \brief Construct a new DefaultLogHandler object
    */
@@ -59,4 +57,4 @@ public:
   void log(const char* file, int line, LogLevel loglevel, const char* log) override;
 };
 
-} // namespace urcl
+}  // namespace urcl

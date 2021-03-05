@@ -30,22 +30,16 @@
 
 #else
 
-#define URCL_LOG_DEBUG(...) \
-  ::urcl::log(__FILE__, __LINE__, urcl::LogLevel::DEBUG, __VA_ARGS__)
-#define URCL_LOG_WARN(...) \
-  ::urcl::log(__FILE__, __LINE__, urcl::LogLevel::WARN, __VA_ARGS__)
-#define URCL_LOG_INFO(...) \
-  ::urcl::log(__FILE__, __LINE__, urcl::LogLevel::INFO, __VA_ARGS__)
-#define URCL_LOG_ERROR(...) \
-  ::urcl::log(__FILE__, __LINE__, urcl::LogLevel::ERROR, __VA_ARGS__)
-#define URCL_LOG_FATAL(...) \
-  ::urcl::log(__FILE__, __LINE__, urcl::LogLevel::FATAL, __VA_ARGS__)
+#define URCL_LOG_DEBUG(...) urcl::log(__FILE__, __LINE__, urcl::LogLevel::DEBUG, __VA_ARGS__)
+#define URCL_LOG_WARN(...) urcl::log(__FILE__, __LINE__, urcl::LogLevel::WARN, __VA_ARGS__)
+#define URCL_LOG_INFO(...) urcl::log(__FILE__, __LINE__, urcl::LogLevel::INFO, __VA_ARGS__)
+#define URCL_LOG_ERROR(...) urcl::log(__FILE__, __LINE__, urcl::LogLevel::ERROR, __VA_ARGS__)
+#define URCL_LOG_FATAL(...) urcl::log(__FILE__, __LINE__, urcl::LogLevel::FATAL, __VA_ARGS__)
 
 #endif
 
 namespace urcl
 {
-
 /*!
  * \brief Different log levels
  */
@@ -65,7 +59,9 @@ enum class LogLevel
 class LogHandler
 {
 public:
-  virtual ~LogHandler() {}
+  virtual ~LogHandler()
+  {
+  }
   /*!
    * \brief Function to log a message
    *
@@ -107,4 +103,4 @@ void setLogLevel(LogLevel level);
  */
 void log(const char* file, int line, LogLevel level, const char* fmt, ...);
 
-} // namespace urcl
+}  // namespace urcl
