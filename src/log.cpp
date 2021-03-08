@@ -52,9 +52,9 @@ public:
     }
   }
 
-  void registerLogHandler(LogHandler* loghandler)
+  void registerLogHandler(std::unique_ptr<LogHandler> loghandler)
   {
-    log_handler_.reset(loghandler);
+    log_handler_ = std::move(loghandler);
   }
 
   void unregisterLogHandler()
@@ -88,9 +88,9 @@ private:
 };
 Logger g_logger;
 
-void registerLogHandler(LogHandler* loghandler)
+void registerLogHandler(std::unique_ptr<LogHandler> loghandler)
 {
-  g_logger.registerLogHandler(loghandler);
+  g_logger.registerLogHandler(std::move(loghandler));
 }
 
 void unregisterLogHandler()

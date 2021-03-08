@@ -18,6 +18,7 @@
 
 #pragma once
 #include <inttypes.h>
+#include <memory>
 
 #ifdef ROS_BUILD
 #include <console_bridge/console.h>
@@ -78,7 +79,7 @@ public:
  *
  * \param loghandler Pointer to the new object
  */
-void registerLogHandler(LogHandler* loghandler);
+void registerLogHandler(std::unique_ptr<LogHandler> loghandler);
 
 /*!
  * \brief Unregister current log handler, this will enable default log handler.
