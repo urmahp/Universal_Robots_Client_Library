@@ -153,17 +153,6 @@ private:
     }
   }
 
-  /*!
-   * \brief Set the Keepalive count. This will set the number of allowed timeout reads on the robot.
-   *
-   * \param count Number of allowed timeout reads on the robot.
-   */
-  void setKeepaliveCount(const uint32_t& count)
-  {
-    keepalive_count_ = count;
-  }
-
-private:
   void disconnectionCallback(const int filedescriptor)
   {
     URCL_LOG_INFO("Connection to reverse interface dropped.", filedescriptor);
@@ -181,7 +170,6 @@ private:
   TCPServer server_;
 
   static const int32_t MULT_JOINTSTATE = 1000000;
-  uint32_t keepalive_count_;
 
   template <typename T>
   size_t append(uint8_t* buffer, T& val)
