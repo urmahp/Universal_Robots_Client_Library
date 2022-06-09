@@ -85,8 +85,8 @@ bool TrajectoryPointInterface::writeTrajectoryPoint(const vector6d_t* positions,
   return server_.write(client_fd_, buffer, sizeof(buffer), written);
 }
 
-bool TrajectoryPointInterface::writeSplinePoint(const vector6d_t* positions, const vector6d_t* velocities,
-                                                const vector6d_t* accelerations, const float goal_time)
+bool TrajectoryPointInterface::writeJointSplinePoint(const vector6d_t* positions, const vector6d_t* velocities,
+                                                     const vector6d_t* accelerations, const float goal_time)
 {
   if (client_fd_ == -1)
   {
@@ -95,8 +95,9 @@ bool TrajectoryPointInterface::writeSplinePoint(const vector6d_t* positions, con
   // spline type 0 for cubic and 1 for quintic
   int32_t spline_type = 1;
 
-  // 6 positions, 6 velocities, 6 accelerations, 1 goal time, spline type
-  const size_t BUFFER_SIZE_INT = 3 * 6 + 3;
+  // 6 positions, 6 velocities, 6 accelerations, 1 goal time, spline type, joint message and a dummy to have the same
+  // size when using joint space and cartesian space
+  const size_t BUFFER_SIZE_INT = 3 * 6 + 4;
   uint8_t buffer[sizeof(int32_t) * BUFFER_SIZE_INT] = { 0 };
   uint8_t* b_pos = buffer;
   if (positions != nullptr)
@@ -111,6 +112,94 @@ bool TrajectoryPointInterface::writeSplinePoint(const vector6d_t* positions, con
   else
   {
     b_pos += 6 * sizeof(int32_t);
+  }
+  // The dummy value
+  b_pos += 1 * sizeof(int32_t);
+
+  if (velocities != nullptr)
+  {
+    for (auto const& vel : *velocities)
+    {
+      int32_t val = static_cast<int32_t>(vel * MULT_JOINTSTATE);
+      val = htobe32(val);
+      b_pos += append(b_pos, val);
+    }
+  }
+  else
+  {
+    b_pos += 6 * sizeof(int32_t);
+  }
+
+  if (accelerations != nullptr)
+  {
+    for (auto const& acc : *accelerations)
+    {
+      int32_t val = static_cast<int32_t>(acc * MULT_JOINTSTATE);
+      val = htobe32(val);
+      b_pos += append(b_pos, val);
+    }
+  }
+  else
+  {
+    // Use cubic splines, when acceleration is not part of the trajectory
+    spline_type = 0;
+    b_pos += 6 * sizeof(int32_t);
+  }
+
+  int32_t val = static_cast<int32_t>(goal_time * MULT_TIME);
+  val = htobe32(val);
+  b_pos += append(b_pos, val);
+
+  val = spline_type;
+  val = htobe32(val);
+  b_pos += append(b_pos, val);
+    
+  val = JOINT_POINT;
+  val = htobe32(val);
+  b_pos += append(b_pos, val);
+
+  size_t written;
+  return server_.write(client_fd_, buffer, sizeof(buffer), written);
+}
+
+bool TrajectoryPointInterface::writeJointSplinePoint(const vector6d_t* positions, const vector6d_t* velocities,
+                                                     const float goal_time)
+{
+  return writeJointSplinePoint(positions, velocities, nullptr, goal_time);
+}
+
+bool TrajectoryPointInterface::writeJointSplinePoint(const vector6d_t* positions, const float goal_time)
+{
+  return writeJointSplinePoint(positions, nullptr, nullptr, goal_time);
+}
+
+bool TrajectoryPointInterface::writeCartesianSplinePoint(const vector7d_t* positions, const vector6d_t* velocities,
+                                                     const vector6d_t* accelerations, const float goal_time)
+{
+  if (client_fd_ == -1)
+  {
+    return false;
+  }
+  // spline type 0 for cubic and 1 for quintic
+  int32_t spline_type = 1;
+
+  // 6 positions, 6 velocities, 6 accelerations, 1 goal time, spline type, joint message and a dummy to have the same
+  // size when using joint space and cartesian space
+  const size_t BUFFER_SIZE_INT = 3 * 6 + 4;
+  uint8_t buffer[sizeof(int32_t) * BUFFER_SIZE_INT] = { 0 };
+  uint8_t* b_pos = buffer;
+  if (positions != nullptr)
+  {
+    for (auto const& pos : *positions)
+    {
+      int32_t val = static_cast<int32_t>(pos * MULT_JOINTSTATE);
+      val = htobe32(val);
+      b_pos += append(b_pos, val);
+    }
+  }
+  else
+  {
+    b_pos += 7 * sizeof(int32_t);
   }
 
   if (velocities != nullptr)
@@ -150,7 +239,8 @@ bool TrajectoryPointInterface::writeSplinePoint(const vector6d_t* positions, con
   val = spline_type;
   val = htobe32(val);
   b_pos += append(b_pos, val);
-
+    
+  val = CARTESIAN_POINT;
   val = htobe32(val);
   b_pos += append(b_pos, val);
 
@@ -158,15 +248,15 @@ bool TrajectoryPointInterface::writeSplinePoint(const vector6d_t* positions, con
   return server_.write(client_fd_, buffer, sizeof(buffer), written);
 }
 
-bool TrajectoryPointInterface::writeSplinePoint(const vector6d_t* positions, const vector6d_t* velocities,
-                                                const float goal_time)
+bool TrajectoryPointInterface::writeCartesianSplinePoint(const vector7d_t* positions, const vector6d_t* velocities,
+                                                     const float goal_time)
 {
-  return writeSplinePoint(positions, velocities, nullptr, goal_time);
+  return writeCartesianSplinePoint(positions, velocities, nullptr, goal_time);
 }
 
-bool TrajectoryPointInterface::writeSplinePoint(const vector6d_t* positions, const float goal_time)
+bool TrajectoryPointInterface::writeCartesianSplinePoint(const vector7d_t* positions, const float goal_time)
 {
-  return writeSplinePoint(positions, nullptr, nullptr, goal_time);
+  return writeCartesianSplinePoint(positions, nullptr, nullptr, goal_time);
 }
 
 void TrajectoryPointInterface::connectionCallback(const int filedescriptor)

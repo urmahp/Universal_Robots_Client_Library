@@ -203,38 +203,74 @@ public:
                             const float blend_radius = 0.052);
 
   /*!
-   * \brief Writes a trajectory spline point onto the dedicated socket.
+   * \brief Writes a joint trajectory spline point onto the dedicated socket.
    *
-   * \param positions Desired joint or cartesian positions
-   * \param velocities Desired joint or cartesian velocities
-   * \param accelerations Desired joint or cartesian accelerations
+   * \param positions Desired joint positions
+   * \param velocities Desired joint velocities
+   * \param accelerations Desired joint accelerations
    * \param goal_time Time for the robot to reach this point
    *
    * \returns True on successful write.
    */
-  bool writeSplinePoint(const vector6d_t& positions, const vector6d_t& velocities, const vector6d_t& accelerations,
+  bool writeJointSplinePoint(const vector6d_t& positions, const vector6d_t& velocities, const vector6d_t& accelerations,
                         const float goal_time = 0.0);
 
   /*!
    * \brief Writes a trajectory spline point onto the dedicated socket.
    *
-   * \param positions Desired joint or cartesian positions
-   * \param velocities Desired joint or cartesian velocities
+   * \param positions Desired joint positions
+   * \param velocities Desired joint velocities
    * \param goal_time Time for the robot to reach this point
    *
    * \returns True on successful write.
    */
-  bool writeSplinePoint(const vector6d_t& positions, const vector6d_t& velocities, const float goal_time = 0.0);
+  bool writeJointSplinePoint(const vector6d_t& positions, const vector6d_t& velocities,
+                        const float goal_time = 0.0);
 
   /*!
    * \brief Writes a trajectory spline point onto the dedicated socket.
    *
-   * \param positions Desired joint or cartesian positions
+   * \param positions Desired joint positions
    * \param goal_time Time for the robot to reach this point
    *
    * \returns True on successful write.
    */
-  bool writeSplinePoint(const vector6d_t& positions, const float goal_time = 0.0);
+  bool writeJointSplinePoint(const vector6d_t& positions, const float goal_time = 0.0);
+
+  /*!
+   * \brief Writes a cartesian trajectory spline point onto the dedicated socket.
+   *
+   * \param positions Desired cartesian positions
+   * \param velocities Desired cartesian velocities
+   * \param accelerations Desired cartesian accelerations
+   * \param goal_time Time for the robot to reach this point
+   *
+   * \returns True on successful write.
+   */
+  bool writeCartesianSplinePoint(const vector7d_t& positions, const vector6d_t& velocities, const vector6d_t& accelerations,
+                        const float goal_time = 0.0);
+
+  /*!
+   * \brief Writes a cartesian trajectory spline point onto the dedicated socket.
+   *
+   * \param positions Desired cartesian positions
+   * \param velocities Desired cartesian velocities
+   * \param goal_time Time for the robot to reach this point
+   *
+   * \returns True on successful write.
+   */
+  bool writeCartesianSplinePoint(const vector7d_t& positions, const vector6d_t& velocities,
+                        const float goal_time = 0.0);
+
+  /*!
+   * \brief Writes a cartesian trajectory spline point onto the dedicated socket.
+   *
+   * \param positions Desired cartesian positions
+   * \param goal_time Time for the robot to reach this point
+   *
+   * \returns True on successful write.
+   */
+  bool writeCartesianSplinePoint(const vector7d_t& positions, const float goal_time = 0.0);
 
   /*!
    * \brief Writes a control message in trajectory forward mode.

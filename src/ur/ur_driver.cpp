@@ -217,20 +217,38 @@ bool UrDriver::writeTrajectoryPoint(const vector6d_t& positions, const bool cart
   return trajectory_interface_->writeTrajectoryPoint(&positions, goal_time, blend_radius, cartesian);
 }
 
-bool UrDriver::writeSplinePoint(const vector6d_t& positions, const vector6d_t& velocities,
+bool UrDriver::writeJointSplinePoint(const vector6d_t& positions, const vector6d_t& velocities,
                                 const vector6d_t& accelerations, const float goal_time)
 {
-  return trajectory_interface_->writeSplinePoint(&positions, &velocities, &accelerations, goal_time);
+  return trajectory_interface_->writeJointSplinePoint(&positions, &velocities, &accelerations, goal_time);
 }
 
-bool UrDriver::writeSplinePoint(const vector6d_t& positions, const vector6d_t& velocities, const float goal_time)
+bool UrDriver::writeJointSplinePoint(const vector6d_t& positions, const vector6d_t& velocities,
+                                const float goal_time)
 {
-  return trajectory_interface_->writeSplinePoint(&positions, &velocities, goal_time);
+  return trajectory_interface_->writeJointSplinePoint(&positions, &velocities, goal_time);
 }
 
-bool UrDriver::writeSplinePoint(const vector6d_t& positions, const float goal_time)
+bool UrDriver::writeJointSplinePoint(const vector6d_t& positions, const float goal_time)
 {
-  return trajectory_interface_->writeSplinePoint(&positions, goal_time);
+  return trajectory_interface_->writeJointSplinePoint(&positions, goal_time);
+}
+
+bool UrDriver::writeCartesianSplinePoint(const vector7d_t& positions, const vector6d_t& velocities,
+                                const vector6d_t& accelerations, const float goal_time)
+{
+  return trajectory_interface_->writeCartesianSplinePoint(&positions, &velocities, &accelerations, goal_time);
+}
+
+bool UrDriver::writeCartesianSplinePoint(const vector7d_t& positions, const vector6d_t& velocities,
+                                const float goal_time)
+{
+  return trajectory_interface_->writeCartesianSplinePoint(&positions, &velocities, goal_time);
+}
+
+bool UrDriver::writeCartesianSplinePoint(const vector7d_t& positions, const float goal_time)
+{
+  return trajectory_interface_->writeCartesianSplinePoint(&positions, goal_time);
 }
 
 bool UrDriver::writeTrajectoryControlMessage(const control::TrajectoryControlMessage trajectory_action,

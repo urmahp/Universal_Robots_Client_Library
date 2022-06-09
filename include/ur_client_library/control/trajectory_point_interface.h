@@ -90,37 +90,73 @@ public:
    * \brief Writes needed information to the robot to be read by the URScript program including
    * velocity and acceleration information.
    *
-   * \param positions A vector of joint or cartesian target positions for the robot
-   * \param velocities A vector of joint or cartesian target velocities for the robot
-   * \param accelerations A vector of joint or cartesian target accelerations for the robot
+   * \param positions A vector of joint target positions for the robot
+   * \param velocities A vector of joint target velocities for the robot
+   * \param accelerations A vector of joint target accelerations for the robot
    * \param goal_time The goal time to reach the target
    *
    * \returns True, if the write was performed successfully, false otherwise.
    */
-  bool writeSplinePoint(const vector6d_t* positions, const vector6d_t* velocities, const vector6d_t* accelerations,
+  bool writeJointSplinePoint(const vector6d_t* positions, const vector6d_t* velocities, const vector6d_t* accelerations,
                         const float goal_time);
 
   /*!
    * \brief Writes needed information to the robot to be read by the URScript program including
    * velocity information.
    *
-   * \param positions A vector of joint or cartesian target positions for the robot
-   * \param velocities A vector of joint or cartesian target velocities for the robot
+   * \param positions A vector of joint target positions for the robot
+   * \param velocities A vector of joint target velocities for the robot
    * \param goal_time The goal time to reach the target
    *
    * \returns True, if the write was performed successfully, false otherwise.
    */
-  bool writeSplinePoint(const vector6d_t* positions, const vector6d_t* velocities, const float goal_time);
+  bool writeJointSplinePoint(const vector6d_t* positions, const vector6d_t* velocities, const float goal_time);
 
   /*!
    * \brief Writes needed information to the robot to be read by the URScript program.
    *
-   * \param positions A vector of joint or cartesian target positions for the robot
+   * \param positions A vector of joint target positions for the robot
    * \param goal_time The goal time to reach the target
    *
    * \returns True, if the write was performed successfully, false otherwise.
    */
-  bool writeSplinePoint(const vector6d_t* positions, const float goal_time);
+  bool writeJointSplinePoint(const vector6d_t* positions, const float goal_time);
+
+  /*!
+   * \brief Writes needed information to the robot to be read by the URScript program including
+   * velocity and acceleration information.
+   *
+   * \param positions A vector of cartesian target positions for the robot, the rotation should be specified in quaternions.
+   * \param velocities A vector of cartesian target velocities for the robot
+   * \param accelerations A vector of cartesian target accelerations for the robot
+   * \param goal_time The goal time to reach the target
+   *
+   * \returns True, if the write was performed successfully, false otherwise.
+   */
+  bool writeCartesianSplinePoint(const vector7d_t* positions, const vector6d_t* velocities, const vector6d_t* accelerations,
+                        const float goal_time);
+
+  /*!
+   * \brief Writes needed information to the robot to be read by the URScript program including
+   * velocity information.
+   *
+   * \param positions A vector of cartesian target positions for the robot, the rotation should be specified in quaternions.
+   * \param velocities A vector of cartesian target velocities for the robot
+   * \param goal_time The goal time to reach the target
+   *
+   * \returns True, if the write was performed successfully, false otherwise.
+   */
+  bool writeCartesianSplinePoint(const vector7d_t* positions, const vector6d_t* velocities, const float goal_time);
+
+  /*!
+   * \brief Writes needed information to the robot to be read by the URScript program.
+   *
+   * \param positions A vector of cartesian target positions for the robot, the rotation should be specified in quaternions.
+   * \param goal_time The goal time to reach the target
+   *
+   * \returns True, if the write was performed successfully, false otherwise.
+   */
+  bool writeCartesianSplinePoint(const vector7d_t* positions, const float goal_time);
 
   void setTrajectoryEndCallback(std::function<void(TrajectoryResult)> callback)
   {
