@@ -20,6 +20,11 @@ add_executable(primary_pipeline_example
 target_compile_options(primary_pipeline_example PUBLIC ${CXX17_FLAG})
 target_link_libraries(primary_pipeline_example ur_client_library::urcl)
 
+add_executable(primary_pipeline_calibration_example
+  primary_pipeline_calibration.cpp)
+target_compile_options(primary_pipeline_calibration_example PUBLIC ${CXX17_FLAG})
+target_link_libraries(primary_pipeline_calibration_example ur_client_library::urcl)
+
 add_executable(rtde_client_example
   rtde_client.cpp)
 target_compile_options(rtde_client_example PUBLIC ${CXX17_FLAG})
