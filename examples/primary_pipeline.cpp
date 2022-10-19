@@ -48,6 +48,13 @@ int main(int argc, char* argv[])
     robot_ip = std::string(argv[1]);
   }
 
+  // Parse how may seconds to run
+  int second_to_run = -1;
+  if (argc > 2)
+  {
+    second_to_run = std::stoi(argv[2]);
+  }
+
   // First of all, we need a stream that connects to the robot
   comm::URStream<primary_interface::PrimaryPackage> primary_stream(robot_ip, urcl::primary_interface::UR_PRIMARY_PORT);
 
@@ -72,9 +79,9 @@ int main(int argc, char* argv[])
 
   // Package contents will be printed while not being interrupted
   // Note: Packages for which the parsing isn't implemented, will only get their raw bytes printed.
-  while (true)
+  do
   {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-  }
+    std::this_thread::sleep_for(std::chrono::seconds(second_to_run));
+  } while (second_to_run < 0);
   return 0;
 }
