@@ -58,23 +58,9 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-  // // Stop program, if there is one running
-  // if (!my_dashboard->commandStop())
-  // {
-  //   URCL_LOG_ERROR("Could not send stop program command");
-  //   return 1;
-  // }
-
-  // Reastart safety
-  if (!my_dashboard->commandRestartSafety())
+if (!my_dashboard->commandPowerOff())
   {
-    URCL_LOG_ERROR("Could not restart safety");
-    return 1;
-  }
-
-if (!my_dashboard->commandUnlockProtectiveStop())
-  {
-    URCL_LOG_ERROR("Could not send commandUnlockProtectiveStop");
+    URCL_LOG_ERROR("Could not send power off");
     return 1;
   }
 

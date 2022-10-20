@@ -38,10 +38,10 @@ DashboardClient::DashboardClient(const std::string& host) : host_(host), port_(D
 {
 }
 
-  void DashboardClient::rtrim(std::string& str, const std::string& chars)
-  {
-    str.erase(str.find_last_not_of(chars) + 1);
-  }
+void DashboardClient::rtrim(std::string& str, const std::string& chars)
+{
+  str.erase(str.find_last_not_of(chars) + 1);
+}
 
 bool DashboardClient::connect()
 {
@@ -159,7 +159,9 @@ bool DashboardClient::waitForReply(const std::string& command, const std::string
   return false;
 }
 
-bool DashboardClient::retryCommand(const std::string& requestCommand, const std::string& requestExpectedResponse, const std::string& waitRequest, const std::string& waitExpectedResponse, unsigned int timeout)
+bool DashboardClient::retryCommand(const std::string& requestCommand, const std::string& requestExpectedResponse,
+                                   const std::string& waitRequest, const std::string& waitExpectedResponse,
+                                   unsigned int timeout)
 {
   const double RETRY_EVERY_SECOND(1.0);
   unsigned int count(0);
@@ -181,22 +183,10 @@ bool DashboardClient::commandPowerOff()
   return sendRequest("power off", "Powering off") && waitForReply("robotmode", "Robotmode: POWER_OFF");
 }
 
-// bool DashboardClient::commandPowerOn(unsigned int timeout)
-// {
-//   const double RETRY_EVERY_SECOND(1.0);
-//   unsigned int count(0);
-//   do
-//   {
-//     sendRequest("power on", "Powering on");
-//     count++;
-
-//     if (waitForReply("robotmode", "Robotmode: IDLE", RETRY_EVERY_SECOND))
-//     {
-//       return true;
-//     }
-//   } while (count < timeout);
-//   return false;
-// }
+bool DashboardClient::commandPowerOn(unsigned int timeout)
+{
+  return retryCommand("power on", "Powering on", "robotmode", "Robotmode: IDLE", timeout);
+}
 
 bool DashboardClient::commandBreakeRelease()
 {
@@ -234,10 +224,10 @@ bool DashboardClient::commandCloseSafetyPopup()
   return sendRequest("close safety popup", "closing safety popup");
 }
 
-// bool DashboardClient::commandRestartSafety()
-// {
-//   return sendRequest("restart safety", "Restarting safety") && waitForReply("robotmode", "Robotmode: POWER_OFF");
-// }
+bool DashboardClient::commandRestartSafety()
+{
+  return sendRequest("restart safety", "Restarting safety") && waitForReply("robotmode", "Robotmode: POWER_OFF");
+}
 
 bool DashboardClient::commandUnlockProtectiveStop()
 {

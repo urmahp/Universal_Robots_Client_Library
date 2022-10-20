@@ -97,6 +97,14 @@ public:
    */
   bool waitForReply(const std::string& command, const std::string& expected, double timeout = 30.0);
 
+  /*! @brief Keep Sending the requesting Command and wait until it returns the expected answer
+   *  @param requestCommand Request command that will be sent to the server
+   *  @param requestExpectedResponse The expected reply to the request 
+   *  @param waitRequest The status request
+   *  @param waitExpectedResponse The expected reply on the status
+   *  @param timeout Timeout time in seconds
+   *  @return True when both the requested command was receive with the expected reply as well as the resulting status also is as expected within the timeout time
+   */
   bool retryCommand(const std::string& requestCommand, const std::string& requestExpectedResponse, const std::string& waitRequest, const std::string& waitExpectedResponse, unsigned int timeout);
 
   /*!
@@ -110,9 +118,7 @@ public:
    * @param timeout Timeout in seconds
    * @return True succeeded
    */
-  bool commandPowerOn(unsigned int timeout = 1200) {
-    return retryCommand("power on", "Powering on", "robotmode", "Robotmode: IDLE", timeout);
-  }
+  bool commandPowerOn(unsigned int timeout = 1200);
 
   /*!
    * @brief Send Breake release command
@@ -161,9 +167,7 @@ public:
    * @brief Send Restart Safety command
    * @return True succeeded
    */
-  bool commandRestartSafety(unsigned int timeout = 1200) {
-    return retryCommand("restart safety", "Restarting safety", "robotmode", "Robotmode: POWER_OFF", timeout);
-  }
+  bool commandRestartSafety();
 
   /*!
    * @brief Send Unlock Protective stop popup command
