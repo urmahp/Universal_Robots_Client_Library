@@ -159,27 +159,44 @@ bool DashboardClient::waitForReply(const std::string& command, const std::string
   return false;
 }
 
-bool DashboardClient::commandPowerOff()
-{
-  return sendRequest("power off", "Powering off") && waitForReply("robotmode", "Robotmode: POWER_OFF");
-}
-
-bool DashboardClient::commandPowerOn(unsigned int timeout)
+bool DashboardClient::retryCommand(const std::string& requestCommand, const std::string& requestExpectedResponse, const std::string& waitRequest, const std::string& waitExpectedResponse, unsigned int timeout)
 {
   const double RETRY_EVERY_SECOND(1.0);
   unsigned int count(0);
   do
   {
-    sendRequest("power on", "Powering on");
+    sendRequest(requestCommand, requestExpectedResponse);
     count++;
 
-    if (waitForReply("robotmode", "Robotmode: IDLE", RETRY_EVERY_SECOND))
+    if (waitForReply(waitRequest, waitExpectedResponse, RETRY_EVERY_SECOND))
     {
       return true;
     }
   } while (count < timeout);
   return false;
 }
+
+bool DashboardClient::commandPowerOff()
+{
+  return sendRequest("power off", "Powering off") && waitForReply("robotmode", "Robotmode: POWER_OFF");
+}
+
+// bool DashboardClient::commandPowerOn(unsigned int timeout)
+// {
+//   const double RETRY_EVERY_SECOND(1.0);
+//   unsigned int count(0);
+//   do
+//   {
+//     sendRequest("power on", "Powering on");
+//     count++;
+
+//     if (waitForReply("robotmode", "Robotmode: IDLE", RETRY_EVERY_SECOND))
+//     {
+//       return true;
+//     }
+//   } while (count < timeout);
+//   return false;
+// }
 
 bool DashboardClient::commandBreakeRelease()
 {
@@ -217,10 +234,10 @@ bool DashboardClient::commandCloseSafetyPopup()
   return sendRequest("close safety popup", "closing safety popup");
 }
 
-bool DashboardClient::commandRestartSafety()
-{
-  return sendRequest("restart safety", "Restarting safety") && waitForReply("robotmode", "Robotmode: POWER_OFF");
-}
+// bool DashboardClient::commandRestartSafety()
+// {
+//   return sendRequest("restart safety", "Restarting safety") && waitForReply("robotmode", "Robotmode: POWER_OFF");
+// }
 
 bool DashboardClient::commandUnlockProtectiveStop()
 {

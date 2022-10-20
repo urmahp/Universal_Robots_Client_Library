@@ -97,6 +97,8 @@ public:
    */
   bool waitForReply(const std::string& command, const std::string& expected, double timeout = 30.0);
 
+  bool retryCommand(const std::string& requestCommand, const std::string& requestExpectedResponse, const std::string& waitRequest, const std::string& waitExpectedResponse, unsigned int timeout);
+
   /*!
    * @brief Send Power off command
    * @return True succeeded
@@ -108,7 +110,9 @@ public:
    * @param timeout Timeout in seconds
    * @return True succeeded
    */
-  bool commandPowerOn(unsigned int timeout = 1200);
+  bool commandPowerOn(unsigned int timeout = 1200) {
+    return retryCommand("power on", "Powering on", "robotmode", "Robotmode: IDLE", timeout);
+  }
 
   /*!
    * @brief Send Breake release command
@@ -157,7 +161,9 @@ public:
    * @brief Send Restart Safety command
    * @return True succeeded
    */
-  bool commandRestartSafety();
+  bool commandRestartSafety(unsigned int timeout = 1200) {
+    return retryCommand("restart safety", "Restarting safety", "robotmode", "Robotmode: POWER_OFF", timeout);
+  }
 
   /*!
    * @brief Send Unlock Protective stop popup command
